@@ -47,10 +47,11 @@ class UploadAzureDriver(BaseUploadDriver, UploadContract):
         driver.store(fileitem, location)
         file_location = driver.file_location
 
-        filename = random_string(15) + fileitem.filename
+        filename = random_string(25) + fileitem.filename
 
         block_blob_service.create_blob_from_path(
             self.config.DRIVERS['azure']['container'], filename, file_location)
+
         return filename
 
     def store_prepend(self, fileitem, prepend, location=None):
