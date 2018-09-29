@@ -1,3 +1,5 @@
+""" Upload Rackspace Driver """
+
 from masonite.contracts import UploadContract
 from masonite.drivers import BaseUploadDriver
 from masonite.exceptions import DriverLibraryNotFound
@@ -47,8 +49,8 @@ class UploadRackspaceDriver(BaseUploadDriver, UploadContract):
         self.validate_extension(filename)
 
         conn.object_store.upload_object(container=self.config.DRIVERS['rackspace']['container'],
-                                               name=filename,
-                                               data=fileitem.file.read())
+                                        name=filename,
+                                        data=fileitem.file.read())
         return filename
 
     def store_prepend(self, fileitem, prepend, location=None):
