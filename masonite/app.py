@@ -271,7 +271,7 @@ class App:
         """
 
         return self._bind_hook('resolve', key, obj)
-    
+
     def merge(self, container):
         for key, provider in container.providers.items():
             if self.has(key) and isinstance(provider, list):
@@ -280,7 +280,7 @@ class App:
                 self.make(key).update(provider)
             else:
                 self.providers.update({key: provider})
-        
+
         return self
 
     def fire_hook(self, action, key, obj):
