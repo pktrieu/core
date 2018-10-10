@@ -26,16 +26,17 @@ class StatusCodeProvider(ServiceProvider):
         self.app.bind('ServiceErrorExceptionHook', ServerErrorExceptionHook())
 
     def boot(self):
-        if self.app.make('StatusCode') == '200 OK':
+        request = self.app.make('Request')
+        if request.get_status_code() == '200 OK':
             return
 
-        if self.app.make('StatusCode') in ('500 Internal Server Error', '404 Not Found', '503 Service Unavailable'):
-            if self.app.make('ViewClass').exists('errors/{}'.format(self.app.make('StatusCode').split(' ')[0])):
+        if request.get_status_code() in ('500 Internal Server Error', '404 Not Found', '503 Service Unavailable'):
+            if self.app.make('ViewClass').exists('errors/{}'.format(request.get_status_code().split(' ')[0])):
                 rendered_view = self.app.make('View')(
-                    'errors/{}'.format(self.app.make('StatusCode').split(' ')[0])).rendered_template
+                    'errors/{}'.format(request.get_status_code().split(' ')[0])).rendered_template
             else:
                 rendered_view = self.app.make('View')('/masonite/snippets/statuscode', {
-                    'code': self.app.make('StatusCode')
+                    'code': request.get_status_code()
                 }).rendered_template
 
             self.app.make('Request').header('Content-Length', str(len(rendered_view)))
