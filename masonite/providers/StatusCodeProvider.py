@@ -16,10 +16,7 @@ class ServerErrorExceptionHook:
             rendered_view = app.make('View')(
                 '/masonite/snippets/statuscode', {'code': '500 Internal Server Error'}).rendered_template
 
-        headers = [
-            ("Content-Length", str(len(rendered_view)))
-        ]
-        app.bind('Headers', headers)
+        app.make('Request').header('Content-Length', str(len(rendered_view)))
         app.bind('Response', rendered_view)
 
 
@@ -40,9 +37,6 @@ class StatusCodeProvider(ServiceProvider):
                 rendered_view = self.app.make('View')('/masonite/snippets/statuscode', {
                     'code': self.app.make('StatusCode')
                 }).rendered_template
-            Headers = [
-                ("Content-Length", str(len(rendered_view)))
-            ]
-            self.app.bind('Response', rendered_view)
 
-            self.app.bind('Headers', Headers)
+            self.app.make('Request').header('Content-Length', str(len(rendered_view)))
+            self.app.bind('Response', rendered_view)

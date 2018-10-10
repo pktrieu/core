@@ -354,7 +354,6 @@ class Request(Extendable):
     def _set_header(self, key, value, http_prefix):
         # Set Headers
         if http_prefix:
-            print('http_prefix', http_prefix)
             self.environ['HTTP_{0}'.format(key)] = str(value)
             self._headers.append(('HTTP_{0}'.format(key), str(value)))
         else:
@@ -368,7 +367,7 @@ class Request(Extendable):
             dict -- Dictionary of all headers.
         """
 
-        return self._headers
+        return self._headers + self.get_cookies()
 
     def reset_headers(self):
         """Resets all headers being set. Typically ran at the end of the request
