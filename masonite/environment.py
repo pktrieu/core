@@ -45,7 +45,9 @@ class LoadEnvironment:
 
 def env(value, default=None):
     env_var = os.getenv(value, default)
-    if env_var.isnumeric():
+    if isinstance(env_var, bool):
+        return env_var
+    elif env_var.isnumeric():
         return int(env_var)
     elif env_var in ('false', 'False'):
         return False
