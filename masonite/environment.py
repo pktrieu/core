@@ -3,8 +3,6 @@
 import os
 from pathlib import Path
 
-from dotenv import load_dotenv
-
 
 class LoadEnvironment:
     """This class is used for loading the environment from .env and .env.* files."""
@@ -17,12 +15,15 @@ class LoadEnvironment:
             override {bool} -- Whether or not the environment variables found should overwrite existing ones. (default: {False})
             only {string} -- If this is set then it will only load that environment. (default: {None})
         """
+        from dotenv import load_dotenv
+        self.env = load_dotenv
+
         if only:
             self._load_environment(only, override=override)
             return
 
         env_path = str(Path('.') / '.env')
-        load_dotenv(env_path, override=override)
+        self.env(env_path, override=override)
 
         if os.environ.get('APP_ENV'):
             self._load_environment(os.environ.get(
@@ -40,7 +41,7 @@ class LoadEnvironment:
             override {bool} -- Whether the environment file should overwrite existing environment keys. (default: {False})
         """
         env_path = str(Path('.') / '.env.{}'.format(env))
-        load_dotenv(dotenv_path=env_path, override=override)
+        self.env(dotenv_path=env_path, override=override)
 
 
 def env(value, default=None):
