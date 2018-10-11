@@ -27,7 +27,7 @@ class StartResponseProvider(ServiceProvider):
             request.header('Location', request.redirect_url)
             request.reset_redirections()
             self.app.bind('Response', 'redirecting ...')
-        
+
         self.app.bind('Headers', request.get_headers())
         request.url_params = {}
         request.reset_headers()
